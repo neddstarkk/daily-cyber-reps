@@ -1,0 +1,26 @@
+title: Detection of Koi Stealer Network Beaconing
+id: 7ddd7138-8eff-45a3-891c-0ffc99e2f147
+status: experimental
+description: Detects HTTP traffic patterns associated with Koi Stealer as observed in the Big Fish campaign.
+author: Nedheesh Hasija
+date: 2026-01-02
+tags:
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: proxy
+    product: squid
+    # Or generically 'web_proxy' depending on your environment
+detection:
+    selection:
+        c-uri-extension:
+            - 'php'  # It was accessing .php files
+        cs-method:
+            - 'POST' # The HTTP method used
+        c-uri:
+            - '*/index.php'
+            - '*/foots.php' 
+    condition: selection
+falsepositives:
+    - Legitimate PHP applications sending POST requests to index.php (Moderate FP rate - requires tuning)
+level: high
